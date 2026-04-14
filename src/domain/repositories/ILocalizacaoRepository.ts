@@ -1,9 +1,10 @@
 // src/domain/repositories/ILocalizacaoRepository.ts
+// Contrato para geolocalização
 
 export interface Coordenadas {
   latitude: number;
   longitude: number;
-  precisao: number; // metros
+  precisao: number; // metros — quanto menor, mais preciso
 }
 
 export interface ILocalizacaoRepository {

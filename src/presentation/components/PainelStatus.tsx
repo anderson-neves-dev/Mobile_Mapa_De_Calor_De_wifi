@@ -1,14 +1,19 @@
 // src/presentation/components/PainelStatus.tsx
+// Exibe informações do scan atual: rede selecionada, RSSI, qualidade, GPS e total de pontos
+
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {AnaliseRssi} from '../../infra/utils/rssiParaCor';
 
 interface Props {
-  ssid: string;
-  rssi: number | null;
+  redeSelecionada: string | null; // null = todas as redes
+  ssidAtual: string;              // nome da rede sendo exibida
+  rssiMedio: number | null;
   analise: AnaliseRssi | null;
   totalPontos: number;
   escaneando: boolean;
+  precisaoGps: number | null;
+  totalRedes: number;
 }
 
 const NIVEL_INFO: Record<string, {label: string; cor: string}> = {
@@ -19,16 +24,25 @@ const NIVEL_INFO: Record<string, {label: string; cor: string}> = {
   muito_fraco: {label: 'Muito Fraco', cor: '#d50000'},
 };
 
-const PainelStatus: React.FC<Props> = ({ssid, rssi, analise, totalPontos, escaneando}) => {
+const PainelStatus: React.FC<Props> = ({
+  redeSelecionada, ssidAtual, rssiMedio, analise,
+  totalPontos, escaneando, precisaoGps, totalRedes,
+}) => {
   const info = analise ? NIVEL_INFO[analise.nivel] : null;
 
   return (
     <View style={styles.container}>
       <View style={styles.linha}>
         <View style={styles.itemGrande}>
-          <Text style={styles.label}>REDE WI-FI</Text>
+          <Text style={styles.label}>
+            {redeSelecionada ? 'REDE SELECIONADA' : 'MODO'}
+          </Text>
           <Text style={styles.valor} numberOfLines={1}>
-            {ssid || (escaneando ? 'Detectando...' : 'Sem rede')}
+            {redeSelecionada
+              ? ssidAtual
+              : escaneando
+              ? `Escaneando ${totalRedes} rede(s)...`
+              : 'Todas as redes'}
           </Text>
         </View>
         <View style={styles.badge}>
@@ -41,17 +55,11 @@ const PainelStatus: React.FC<Props> = ({ssid, rssi, analise, totalPontos, escane
 
       <View style={styles.linha}>
         <View style={styles.item}>
-          <Text style={styles.label}>RSSI</Text>
+          <Text style={styles.label}>RSSI MÉDIO</Text>
           <Text style={[styles.grande, {color: info?.cor ?? '#fff'}]}>
-            {rssi != null ? `${rssi}` : '---'}
+            {rssiMedio != null ? `${rssiMedio}` : '---'}
           </Text>
           <Text style={styles.unidade}>dBm</Text>
-        </View>
-        <View style={styles.item}>
-          <Text style={styles.label}>NÍVEL</Text>
-          <Text style={[styles.valor, {color: info?.cor ?? '#888'}]}>
-            {info?.label ?? '---'}
-          </Text>
         </View>
         <View style={styles.item}>
           <Text style={styles.label}>QUALIDADE</Text>
@@ -60,19 +68,30 @@ const PainelStatus: React.FC<Props> = ({ssid, rssi, analise, totalPontos, escane
           </Text>
         </View>
         <View style={styles.item}>
+          <Text style={styles.label}>GPS</Text>
+          <Text style={[styles.grande, {
+            color: precisaoGps == null ? '#555'
+              : precisaoGps <= 10 ? '#00c853'
+              : precisaoGps <= 20 ? '#ffd600'
+              : '#d50000',
+          }]}>
+            {precisaoGps != null ? `${Math.round(precisaoGps)}m` : '---'}
+          </Text>
+        </View>
+        <View style={styles.item}>
           <Text style={styles.label}>PONTOS</Text>
           <Text style={styles.grande}>{totalPontos}</Text>
         </View>
       </View>
 
-      <View style={styles.barra}>
-        {analise && (
+      {analise && (
+        <View style={styles.barra}>
           <View style={[styles.barraFill, {
             width: `${analise.qualidade}%`,
             backgroundColor: info?.cor ?? '#333',
           }]} />
-        )}
-      </View>
+        </View>
+      )}
     </View>
   );
 };

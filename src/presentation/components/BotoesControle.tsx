@@ -1,4 +1,6 @@
 // src/presentation/components/BotoesControle.tsx
+// Botões de controle na parte inferior: Iniciar/Parar scan e Limpar pontos
+
 import React from 'react';
 import {View, TouchableOpacity, Text, StyleSheet, Alert} from 'react-native';
 
@@ -14,10 +16,10 @@ const BotoesControle: React.FC<Props> = ({escaneando, totalPontos, onToggle, onL
     if (!totalPontos) return;
     Alert.alert(
       'Limpar Mapa',
-      `Remover todos os ${totalPontos} pontos coletados?`,
+      `Remover todos os ${totalPontos} pontos de todas as redes?`,
       [
         {text: 'Cancelar', style: 'cancel'},
-        {text: 'Limpar', style: 'destructive', onPress: onLimpar},
+        {text: 'Limpar Tudo', style: 'destructive', onPress: onLimpar},
       ],
     );
   };
@@ -31,7 +33,6 @@ const BotoesControle: React.FC<Props> = ({escaneando, totalPontos, onToggle, onL
         <Text style={styles.btnIcon}>{escaneando ? '⏹' : '▶'}</Text>
         <Text style={styles.btnTxt}>{escaneando ? 'PARAR SCAN' : 'INICIAR SCAN'}</Text>
       </TouchableOpacity>
-
       <TouchableOpacity
         style={[styles.btnSec, !totalPontos && styles.btnOff]}
         onPress={confirmarLimpar}

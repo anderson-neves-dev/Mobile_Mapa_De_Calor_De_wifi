@@ -1,4 +1,5 @@
 // src/domain/entities/PontoMapa.ts
+// Representa um ponto geográfico com leitura de sinal de UMA rede
 
 export interface PontoMapa {
   id: string;
@@ -6,7 +7,8 @@ export interface PontoMapa {
   longitude: number;
   rssi: number;
   ssid: string;
-  cor: string;       // rgba calculado por rssiParaCor()
+  bssid: string;   // chave para agrupar pontos por rede
+  cor: string;
   timestamp: number;
 }
 
@@ -15,6 +17,7 @@ export const criarPontoMapa = (
   longitude: number,
   rssi: number,
   ssid: string,
+  bssid: string,
   cor: string,
 ): PontoMapa => ({
   id: `ponto_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -22,6 +25,7 @@ export const criarPontoMapa = (
   longitude,
   rssi,
   ssid,
+  bssid,
   cor,
   timestamp: Date.now(),
 });

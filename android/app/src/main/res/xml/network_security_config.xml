@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Caminho: android/app/src/main/res/xml/network_security_config.xml -->
+<!-- Permite requisições HTTP para os servidores de tiles do OpenStreetMap -->
+<network-security-config>
+  <domain-config cleartextTrafficPermitted="true">
+    <domain includeSubdomains="true">tile.openstreetmap.org</domain>
+    <domain includeSubdomains="true">a.tile.openstreetmap.org</domain>
+    <domain includeSubdomains="true">b.tile.openstreetmap.org</domain>
+    <domain includeSubdomains="true">c.tile.openstreetmap.org</domain>
+  </domain-config>
+</network-security-config>

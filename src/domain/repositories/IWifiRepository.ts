@@ -1,7 +1,10 @@
 // src/domain/repositories/IWifiRepository.ts
-import {SinalWifi} from '../entities/SinalWifi';
+// Contrato para acesso ao Wi-Fi — a camada de domínio só conhece esta interface
+import {RedeWifi} from '../entities/SinalWifi';
 
 export interface IWifiRepository {
-  obterSinalAtual(): Promise<SinalWifi | null>;
+  // Retorna TODAS as redes visíveis ao redor com seus RSSIs
+  listarRedesVisiveis(): Promise<RedeWifi[]>;
+  // Verifica se o Wi-Fi está ligado
   isWifiHabilitado(): Promise<boolean>;
 }
